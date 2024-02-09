@@ -3,7 +3,6 @@ import prisma from '../DB/db.config.js'
 
 
 export const createUser = async (req, res) =>{
-    console.log(req.body)
     const {name, email, password} = req.body
 
 
@@ -33,3 +32,17 @@ export const createUser = async (req, res) =>{
     })
     return res.status(200).json({message: "User created successfully", data: createdUser})
 }
+
+export const getUsers = async (req, res) => {
+    try {
+        const users = await prisma.user.findMany({
+            include: {
+                todos: true,
+            },
+        });
+        return res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};

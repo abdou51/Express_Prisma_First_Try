@@ -10,10 +10,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  name String?
-  email String @unique
-  password String?
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String?
+  email      String   @unique
+  password   String?
+  todos      Todo[]   // Adds a list of Todo items associated with the User
+  created_at DateTime @default(now())
+}
+
+model Todo {
+  id         Int      @id @default(autoincrement())
+  title      String?
+  completed  Boolean  @default(false)
+  userId     Int      // Foreign key referencing the User model's id
+  user       User     @relation(fields: [userId], references: [id])
   created_at DateTime @default(now())
 }
